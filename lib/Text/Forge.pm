@@ -1144,7 +1144,7 @@ together (not overwritten); this allows, for example, multiple calls
 to something like content_for('head', ...) in various places, which are
 then aggregated together and inserted at the head of the document.
 
-When called With two arguments, this method stores the specified content in
+When called with two arguments, this method stores the specified content in
 the named location:
 
   my $forge = Text::Forge->new;
