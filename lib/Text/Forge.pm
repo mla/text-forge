@@ -1066,8 +1066,8 @@ If caching is enabled, templates are compiled into subroutines once and
 then reused. Cached templates will not reflect changes to the underlying
 template files.
 
-If you want to ensure templates are always recompiled (such as during
-development), set cache() to false.
+If you want to ensure templates always reflect the latest changes
+(such as during development), set cache() to false.
 
 If you want to maximize performance, set cache() to true.
 
