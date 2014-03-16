@@ -55,6 +55,8 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
 # =begin testing
 {
+  no warnings 'once';
+
   my $forge = $CLASS->new;
   is_deeply [ $forge->search_paths ], \@Text::Forge::FINC,
     'search_paths, defaults to \@FINC';
@@ -85,6 +87,8 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
 # =begin testing
 {
+  no warnings 'once';
+
   my $forge = $CLASS->new;
   is $forge->cache, $Text::Forge::CACHE, 'cache, defaults to $CACHE';
 
@@ -98,6 +102,8 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
 # =begin testing
 {
+  no warnings 'once';
+
   my $forge = $CLASS->new;
   is $forge->charset, $Text::Forge::CHARSET,
     'charset, defaults to $CHARSET';
@@ -202,6 +208,7 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
 
   {
+    no warnings 'once';
     local $Text::Forge::INTERPOLATE = 1;
  
     my $code = $CLASS->_parse('<% my $i = 5 %>hello $i there <% %> $i');
