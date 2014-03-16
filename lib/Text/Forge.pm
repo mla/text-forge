@@ -1013,7 +1013,7 @@ Interpolation blocks are evaluated and the result inserted into
 the template.
 
 Templates are compiled into normal Perl methods. They can
-be passed arguments as you would expect.
+be passed arguments, as you might expect.
 
   print $forge->run(
     \'<% my %args = @_ %>Name is <%= $args{name} %>',
