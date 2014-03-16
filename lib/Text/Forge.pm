@@ -1169,7 +1169,7 @@ If defined, the layout template is applied after the primary template
 is generated. The layout template may then "wrap" the primary template
 with additional content.
 
-For example, rather than have each template include() a separate header
+For example, rather than have each template L</include> a separate header
 and footer template explicitly, a layout() template can be used more
 simply:
 
