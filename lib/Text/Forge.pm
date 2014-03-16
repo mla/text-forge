@@ -1,5 +1,5 @@
 package Text::Forge;
-# ABSTRACT: Embedded Perl templates
+# ABSTRACT: Templates with embedded Perl
 
 #{{{ test
 
