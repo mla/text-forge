@@ -4,7 +4,7 @@ Text::Forge - Templates with embedded Perl
 
 # VERSION
 
-version 6.01
+version 6.02
 
 # SYNOPSIS
 

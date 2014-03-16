@@ -24,7 +24,7 @@ use File::Spec ();
 use HTML::Entities ();
 use URI::Escape ();
 
-our $VERSION = '6.01';
+our $VERSION = '6.02';
 
 our @FINC = ('.'); # default search paths
 our %FINC; # compiled template cache
