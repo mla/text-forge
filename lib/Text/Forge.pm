@@ -980,8 +980,8 @@ __END__
 
   my $forge = Text::Forge->new;
 
-  # template stored as external file
-  print $forge->run('/path/to/template');
+  # template in external file
+  print $forge->run('path/to/template');
 
   # template passed as reference
   print $forge->run(\'
