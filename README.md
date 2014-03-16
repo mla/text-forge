@@ -108,7 +108,8 @@ If you want to maximize performance, set cache() to true.
     my $forge = Text::Forge->new;
     $forge->charset('iso-8859-1');
 
-Specifies the character encoding to use for templates. Defaults to utf8.
+Specifies the character encoding to use for templates.
+Defaults to unicode (utf8).
 
 ## search\_paths
 
