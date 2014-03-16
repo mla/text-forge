@@ -1157,7 +1157,7 @@ the named location:
     <% }) %>
   ');
 
-When called with one argument, returns the previously stored content, if any:
+When called with one argument, it returns the previously stored content, if any:
 
   my $nav = $self->content_for('nav');
 
