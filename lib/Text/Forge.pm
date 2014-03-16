@@ -1183,4 +1183,36 @@ simply:
 Within the layout, the primary template content is available as $_ (as well
 as through $self->content_for('main')).
 
+=head2 escape_html
+=head2 h
+
+Returns HTML encoded copies of its arguments. This method is used internally
+to encode the result of <%= %> blocks, but can be called directly:
+
+  my $forge = Text::Forge->new;
+  print $forge->run(\'<% print $self->escape_html("<strong>") %>');
+  # outputs: &lt;strong&gt;
+
+The h() method is just an alias for convenience.
+
+If a blessed reference is passed that provides an as_html() method, the
+result of that method will be returned instead. This allows objects to
+be constructed that keep track of their own encoding state.
+
+=head2 escape_uri
+=head2 u 
+
+Returns URI escaped copies of its arguments. This method is used internally
+to encode the result of <%? %> blocks, but can be called directly:
+
+  my $forge = Text::Forge->new;
+  print $forge->run(\'<% print $self->escape_uri("name=foo") %>');
+  # outputs: name%3Dfoo
+
+The u() method is just an alias for convenience.
+
+If a blessed reference is passed that provides an as_uri() method, the
+result of that method will be returned instead. This allows objects to
+be constructed that keep track of their own encoding state.
+
 =cut
