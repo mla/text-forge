@@ -45,7 +45,7 @@ Interpolation blocks are evaluated and the result inserted into
 the template.
 
 Templates are compiled into normal Perl methods. As such, they can
-be passed arguments and return values as you would expect.
+be passed arguments as you would expect.
 
     print $forge->run(
       \'<% my %args = @_ %>Name is <%= $args{name} %>',
@@ -54,7 +54,7 @@ be passed arguments and return values as you would expect.
 
 The $self variable is available within all templates, and is a reference
 to the Text::Forge instance that is generating the document. This allows
-subclassing to provide customization and context to the templates.
+subclasses to provide customization and context to the templates.
 
 If a block is followed solely by whitespace up to the next newline,
 that whitespace (including the newline) will be suppressed from the output.
@@ -109,7 +109,7 @@ If you want to maximize performance, set cache() to true.
     $forge->charset('iso-8859-1');
 
 Specifies the character encoding to use for templates.
-Defaults to unicode (utf8).
+Defaults to Unicode (utf8).
 
 ## search\_paths
 
