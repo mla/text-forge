@@ -1195,7 +1195,7 @@ as through $self->content_for('main')).
 =head2 escape_html, h
 
 Returns HTML encoded versions of its arguments. This method is used internally
-to encode the result of <%= %> blocks, but can be called directly:
+to encode the result of <%= %> blocks, but can be used directly:
 
   my $forge = Text::Forge->new;
   print $forge->run(\'<% print $self->escape_html("<strong>") %>');
@@ -1210,7 +1210,7 @@ be constructed that keep track of their own encoding state.
 =head2 escape_uri, u
 
 Returns URI escaped versions of its arguments. This method is used internally
-to encode the result of <%? %> blocks, but can be called directly:
+to encode the result of <%? %> blocks, but can be used directly:
 
   my $forge = Text::Forge->new;
   print $forge->run(\'<% print $self->escape_uri("name=foo") %>');
