@@ -1012,7 +1012,7 @@ is output.
 Interpolation blocks are evaluated and the result inserted into
 the template.
 
-Templates are compiled into normal Perl methods. As such, they can
+Templates are compiled into normal Perl methods. They can
 be passed arguments as you would expect.
 
   print $forge->run(
