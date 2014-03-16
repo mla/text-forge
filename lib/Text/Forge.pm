@@ -1140,7 +1140,7 @@ Capture the output into a named placeholder. Same as capture() except the
 result in stored internally as $forge->{captures}{ $name }.
 
 Note that multiple calls to content_for() with the same name are concatenated
-together (not overwritten); this allows, for example, to have multiple calls
+together (not overwritten); this allows, for example, multiple calls
 to something like content_for('head', ...) in various places, which are
 aggregated together and inserted at the head of the document.
 
