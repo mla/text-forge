@@ -216,7 +216,8 @@ Within the layout, the primary template content is available as $\_ (as well
 as through $self->content\_for('main')).
 
 ## escape\_html
-=head2 h
+
+## h
 
 Returns HTML encoded copies of its arguments. This method is used internally
 to encode the result of <%= %> blocks, but can be called directly:
@@ -232,7 +233,8 @@ result of that method will be returned instead. This allows objects to
 be constructed that keep track of their own encoding state.
 
 ## escape\_uri
-=head2 u 
+
+## u 
 
 Returns URI escaped copies of its arguments. This method is used internally
 to encode the result of <%? %> blocks, but can be called directly:

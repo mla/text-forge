@@ -1184,6 +1184,7 @@ Within the layout, the primary template content is available as $_ (as well
 as through $self->content_for('main')).
 
 =head2 escape_html
+
 =head2 h
 
 Returns HTML encoded copies of its arguments. This method is used internally
@@ -1200,6 +1201,7 @@ result of that method will be returned instead. This allows objects to
 be constructed that keep track of their own encoding state.
 
 =head2 escape_uri
+
 =head2 u 
 
 Returns URI escaped copies of its arguments. This method is used internally
