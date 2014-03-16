@@ -1067,7 +1067,7 @@ then reused. Cached templates will not reflect changes to the underlying
 template files.
 
 If you want to ensure templates always reflect the latest changes
-(such as during development), set cache() to false.
+on disk (such as during development), set cache() to false.
 
 If you want to maximize performance, set cache() to true.
 
