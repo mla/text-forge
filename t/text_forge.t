@@ -7,10 +7,8 @@
 use utf8;
 use Carp;
 use autodie qw/ :all /;
-no warnings 'uninitialized';
-use File::Spec;
+# no warnings 'uninitialized';
 use Test::Most;
-use HTTP::Request::Common;
 
 
 $| = 1;

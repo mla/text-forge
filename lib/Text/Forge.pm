@@ -1,4 +1,5 @@
 package Text::Forge;
+# ABSTRACT: Embedded Perl templates
 
 #{{{ test
 
@@ -785,7 +786,7 @@ sub _apply_layout {
 
   while (my $layout = $self->{layout}) {
     $self->{layout} = undef;
-    $self->{captures}{main} = $self->{content};
+    local $_ = $self->{captures}{main} = $self->{content};
     eval { $self->{content} = $self->capture($layout) };
     croak "Layout '$layout' failed: $@" if $@;
   }
@@ -971,75 +972,29 @@ use Method::Alias trap_send => 'run';
 __END__
 
 
-=head1 NAME
-
-Text::Forge - embedded Perl templates
+=pod
 
 =head1 SYNOPSIS
 
-  use 5.10.0;
   use Text::Forge;
 
   my $forge = Text::Forge->new;
   print $forge->run('/path/to/template');
 
+  print $forge->run(\'
+    <% my $d = scalar localtime %>The date is <%= $d %>
+  ');
+  # Outputs: The date is Fri Nov 26 11:32:22 2010
 
-  Template syntax:
+=head1 DESCRIPTION
 
-    <%  %> - evaluate Perl block
-    <%= %> - evaluate Perl block and output result
+This module uses templates to generate documents dynamically. Templates
+are normal text files with a bit of special syntax that allows Perl code
+to be embedded.
 
+The following tags are supported:
 
-  Examples (using inline templates):
-
-    say $forge->run(\'The time is currently <%= scalar localtime %>');
-    # Output:
-    #   Time is Fri Nov 26 11:32:22 2010
-
-
-    # Within a template, the $self object refers to the Text::Forge
-    # instance.
-    say $forge->run(\'<% $self->{cnt}++ %>Count: <%= $self->{cnt} %>');
-    say $forge->run(\'<% $self->{cnt}++ %>Count: <%= $self->{cnt} %>');
-    # Output:
-    #   Count: 1
-    #   Count: 2
-
-
-    # Templates are just functions, and they can be passed arguments just
-    # like functions.
-    say $forge->run(
-      \'<% my %args = @_ %>Name is <%= $args{name} %>',
-      name => 'foo'
-    );
-    # Output:
-    #   Name is foo
-
-
-    # Include one template whithin another. Again, arguments can be passed
-    # just like above.
-    say $forge->run(
-      \'<body><% $self->include("article", id => 4) %></body>'
-    );
-
-
-=head1 DESCRIPTION 
-
-This module uses templates to generate documents dynamically.
-Templates are normal text files except they have a bit of special syntax
-that allows you to run perl code inside them.
-
-=head1 Template Syntax
-
-Templates are normal text files except for code blocks which look like
-this:
-
-  <% %>
-
-The type of block is determined by the character that follows the
-opening characters:
-
-  <%  %> code block
+  <%  %> code block (no output)
   <%= %> interpolate, result is HTML escaped
   <%? %> interpolate, result is URI escaped
   <%$ %> interpolate, no escaping (use with care)
@@ -1048,53 +1003,169 @@ opening characters:
 All blocks are evaluated within the same lexical scope (so my
 variables declared in one block are visible in subsequent blocks).
 
-Code blocks contain straight perl code. Anything printed to standard output
-becomes part of the template output.
+Code blocks contain straight perl code. It is executed, but nothing
+is output.
 
 Interpolation blocks are evaluated and the result inserted into
 the template.
 
+Templates are compiled into normal Perl methods. As such, they can
+be passed arguments and return values as you would expect.
+
+  print $forge->run(
+    \'<% my %args = @_ %>Name is <%= $args{name} %>',
+    name => 'foo'
+  );
+
+The $self variable is available within all templates, and is a reference
+to the Text::Forge instance that is generating the document. This allows
+subclassing to provide customization and context to the templates.
+
 If a block is followed solely by whitespace up to the next newline,
 that whitespace (including the newline) will be suppressed from the output.
-If you really wanted a newline, just add another newline after the block.
-The idea here is that the blocks themselves shouldn't affect the formatting.
+If you really want a newline, add another newline after the block.
+The idea is that the blocks themselves shouldn't affect the formatting.
 
-=head1 Generating Templates
+Anything printed to standard output (STDOUT) becomes part of the template.
 
-To generate a template,instantiate a Text::Forge object and
-tell it the template file to process:
+Any errors in compiling or executing a template raises an exception.
+
+=head1 METHODS 
+
+=head2 new
+
+Constructor. Returns a Text::Forge instance.
+
+  my $forge = Text::Forge->new(%options);
+
+=head2 run
+
+Generate a template. The first argument is the template, which may be
+either a file path or a reference to a scalar. Any additional arguments
+are passed to the template.
+
+  my $content = $forge->run('path/to/my/template', name => foo');
+
+If a path is supplied but is not absolute, it will be searched for within
+the list of search_paths().
+
+The generated output is returned.
+
+=head2 cache
 
   my $forge = Text::Forge->new;
-  print $forge->run('my_template');
+  $forge->cache(1);
 
-Every template has access to $self, which is a reference to the Text::Forge
-instance.
+Dictates whether templates should be cached. Defaults to true.
 
-Text::Forge can be easily subclassed, allowing additional methods to be
-made available to all templates it is used with.
+If caching is enabled, templates are compiled into subroutines once and
+then reused. Cached templates will not reflect changes to the underlying
+template files.
 
-You can include a template within another template using the include() method.
-Here's how we might include a header in our main template.
+If you want to ensure templates are always recompiled (such as during
+development), set cache() to false.
 
-  <% $self->include('header') %>
+If you want to maximize performance, set cache() to true.
 
-Templates are really just Perl functions, so you can pass values into
-them and they can pass values back.
-
-  <% my $rv = $self->include('header', title => 'foo', meta => 'blurgle' ) %>
-
-You can generate a template that's in a scalar (instead of an external file)
-by passing a reference to it.
+=head2 charset
 
   my $forge = Text::Forge->new;
-  $forge->send(\"Hello Word <%= scalar localtime %>");
+  $forge->charset('iso-8859-1');
 
-=head1 Error Handling
+Specifies the character encoding to use for templates. Defaults to utf8.
 
-Exceptions are raised on error.
+=head2 search_paths
 
-=head1 AUTHOR 
+The list of directories to search for relative template paths.
 
-Maurice Aubrey <maurice.aubrey@gmail.com>.
+  my $forge = Text::Forge->new;
+  $forge->search_paths('/home/app/templates', '.');
+  $forge->run('header'); # looks for /home/app/templates/header and ./header
+
+=head1 TEMPLATE METHODS
+
+The following methods are intended for use within templates. It's all the
+same object though, so knock yourself out.
+
+=head2 include
+
+Include one template within another.
+
+For example, if you want to insert a "header" template within another
+template. Note that arguments can be passed to included templates and
+values can be returned (like normal function calls).
+
+  my $forge = Text::Forge->new;
+  $forge->run(\'<% $self->include("header", title => 'Hi') %>Hello');
+
+=head2 capture
+
+Capture the output of a template.
+
+Used to capture (but not necessarily include) one template within another.
+For example:
+
+  my $forge = Text::Forge->new;
+  $forge->run(\'
+    <% my $pagination = $self->capture(sub { %>
+         Page 
+         <ul>
+           <% foreach (1..10) { %>
+                <li><%= $_ %></li>
+           <% } %>
+         </ul>
+    <% }) %>
+    <h1>Title</h1>
+    <%$ $pagination %>
+    Results...
+    <%$ $pagination %>
+  ');
+
+In this case the 'pagination' content has been "captured" into the variable
+$pagination, which is then inserted in multiple locations within the
+main template.
+
+=head2 capture_for
+
+Capture the output into a named placeholder. Same as capture() except the
+result in stored in $forge->{captures}{ $name }.
+
+With two arguments, stores the specified content in the named location:
+
+  my $forge = Text::Forge->new;
+  $forge->run(\'
+    <h1>Title</h1>
+    <% $self->capture_for('nav', sub { %>
+         <ul>
+           <li>...</li>
+         </ul>
+    <% }) %>
+  ');
+
+With one argument, returns the previously stored content:
+
+  my $nav = $self->content_for('nav');
+
+=head2 layout
+
+Specifies a layout template to apply. Defaults to none.
+
+If defined, the layout template is applied after the primary template
+is generated. The layout template may then "wrap" the primary template
+in additional content.
+
+For example, rather than have each template include() a separate header
+and footer template explicitly, a layout() template can be used more
+simply:
+
+  my $forge = Text::Forge->new;
+  $forge->layout(\'<html><body><%$ $_ %></body></html>');
+  print $forge->run(\'<h1>Hello, World!</h1>');
+
+  # results in:
+  # <html><body><h1>Hello, World!</h1></body></html>
+
+Within the layout, the primary template content is available in $_ (as well
+as through $self->content_for('main')).
 
 =cut
