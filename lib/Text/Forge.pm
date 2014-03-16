@@ -1000,7 +1000,7 @@ The following tags are supported:
   <%  %> code block (no output)
   <%= %> interpolate, result is HTML escaped
   <%? %> interpolate, result is URI escaped
-  <%$ %> interpolate, no escaping (use with care)
+  <%$ %> interpolate, no escaping (let's be careful out there)
   <%# %> comment
 
 All blocks are evaluated within the same lexical scope (so my
