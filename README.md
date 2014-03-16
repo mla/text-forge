@@ -61,6 +61,7 @@ The idea is that the blocks themselves shouldn't affect the formatting.
 Anything printed to standard output (STDOUT) becomes part of the template.
 
 Any errors in compiling or executing a template raises an exception.
+Errors should correctly reference the template line causing the issue.
 
 # METHODS 
 
