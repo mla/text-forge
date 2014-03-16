@@ -1051,7 +1051,7 @@ are passed to the template.
   my $content = $forge->run('path/to/my/template', name => 'foo');
 
 If a path is supplied but is not absolute, it will be searched for within
-the list of L</search_paths>().
+the list of L</search_paths>.
 
 The generated output is returned.
 
