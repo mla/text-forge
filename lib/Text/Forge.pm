@@ -1006,7 +1006,7 @@ The following tags are supported:
 All blocks are evaluated within the same lexical scope (so my
 variables declared in one block are visible in subsequent blocks).
 
-Code blocks contain straight perl code. It is executed, but nothing
+Code blocks contain straight Perl code; it is executed, but nothing
 is output.
 
 Interpolation blocks are evaluated and the result inserted into
