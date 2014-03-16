@@ -1,6 +1,12 @@
 package Text::Forge;
 # ABSTRACT: Templates with embedded Perl
 
+=pod
+
+=encoding utf8
+
+=cut
+
 #{{{ test
 
 =begin testing
@@ -1000,7 +1006,7 @@ The following tags are supported:
   <%  %> code block (no output)
   <%= %> interpolate, result is HTML escaped
   <%? %> interpolate, result is URI escaped
-  <%$ %> interpolate, no escaping (let's be careful out there)
+  <%$ %> interpolate, no escaping (let's be careful)
   <%# %> comment
 
 All blocks are evaluated within the same lexical scope (so my
@@ -1013,7 +1019,7 @@ Interpolation blocks are evaluated and the result inserted into
 the template.
 
 Templates are compiled into normal Perl methods. They can
-be passed arguments, as you might expect.
+be passed arguments, as you might expect:
 
   print $forge->run(
     \'<% my %args = @_ %>Name is <%= $args{name} %>',
@@ -1022,17 +1028,17 @@ be passed arguments, as you might expect.
 
 The $self variable is available within all templates, and is a reference
 to the Text::Forge instance that is generating the document. This allows
-subclasses to provide customization and context to the templates.
-
-If a block is followed solely by whitespace up to the next newline,
-that whitespace (including the newline) will be suppressed from the output.
-If you really want a newline, add another newline after the block.
-The idea is that the blocks themselves shouldn't affect the formatting.
+subclasses to provide customization and context to templates.
 
 Anything printed to standard output (STDOUT) becomes part of the template.
 
 Any errors in compiling or executing a template raises an exception.
 Errors should correctly reference the template line causing the problem.
+
+If a block is followed solely by whitespace up to the next newline,
+that whitespace (including the newline) will be suppressed from the output.
+If you really want a newline, add another newline after the block.
+The idea is that the blocks themselves shouldn't affect the formatting.
 
 =head1 METHODS 
 
@@ -1050,7 +1056,7 @@ are passed to the template.
 
   my $content = $forge->run('path/to/my/template', name => 'foo');
 
-If a path is supplied but is not absolute, it will be searched for within
+If a path is supplied and is not absolute, it will be searched for within
 the list of L</search_paths>.
 
 The generated output is returned.
@@ -1060,11 +1066,10 @@ The generated output is returned.
   my $forge = Text::Forge->new;
   $forge->cache(1);
 
-Dictates whether templates should be cached. Defaults to true.
+Specifies whether templates should be cached. Defaults to true.
 
 If caching is enabled, templates are compiled into subroutines once and
-then reused. Cached templates will not reflect changes to the underlying
-template files.
+then reused.
 
 If you want to ensure templates always reflect the latest changes
 on disk (such as during development), set cache() to false.
@@ -1084,8 +1089,10 @@ Defaults to Unicode (utf8).
 The list of directories to search for relative template paths.
 
   my $forge = Text::Forge->new;
-  $forge->search_paths('/home/app/templates', '.');
-  $forge->run('header'); # looks for /home/app/templates/header and ./header
+  $forge->search_paths('/app/templates', '.');
+
+  # will look for /app/templates/header and ./header
+  $forge->run('header');
 
 =head2 content
 
@@ -1124,6 +1131,7 @@ For example:
            <% } %>
          </ul>
     <% }) %>
+
     <h1>Title</h1>
     <%$ $pagination %>
     Results...
@@ -1141,8 +1149,8 @@ result in stored internally as $forge->{captures}{ $name }.
 
 Note that multiple calls to content_for() with the same name are concatenated
 together (not overwritten); this allows, for example, multiple calls
-to something like content_for('head', ...) in various places, which are
-then aggregated together and inserted at the head of the document.
+to something like content_for('head', ...), which are then aggregated and
+inserted somewhere in the document.
 
 When called with two arguments, this method stores the specified content in
 the named location:
@@ -1150,6 +1158,7 @@ the named location:
   my $forge = Text::Forge->new;
   $forge->run(\'
     <h1>Title</h1>
+
     <% $self->capture_for('nav', sub { %>
          <ul>
            <li>...</li>
@@ -1183,11 +1192,9 @@ simply:
 Within the layout, the primary template content is available as $_ (as well
 as through $self->content_for('main')).
 
-=head2 escape_html
+=head2 escape_html, h
 
-=head2 h
-
-Returns HTML encoded copies of its arguments. This method is used internally
+Returns HTML encoded versions of its arguments. This method is used internally
 to encode the result of <%= %> blocks, but can be called directly:
 
   my $forge = Text::Forge->new;
@@ -1200,11 +1207,9 @@ If a blessed reference is passed that provides an as_html() method, the
 result of that method will be returned instead. This allows objects to
 be constructed that keep track of their own encoding state.
 
-=head2 escape_uri
+=head2 escape_uri, u
 
-=head2 u 
-
-Returns URI escaped copies of its arguments. This method is used internally
+Returns URI escaped versions of its arguments. This method is used internally
 to encode the result of <%? %> blocks, but can be called directly:
 
   my $forge = Text::Forge->new;
