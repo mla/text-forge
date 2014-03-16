@@ -1140,7 +1140,7 @@ For example:
 
 In this case the "pagination" content has been captured into the variable
 $pagination, which is then inserted in multiple locations elsewhere in
-the template.
+the document.
 
 =head2 content_for 
 
