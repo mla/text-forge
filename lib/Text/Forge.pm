@@ -1,12 +1,15 @@
 package Text::Forge;
 
 #{{{ test
+
 =begin testing
 
   use_ok $CLASS;
 
 =end testing
+
 =cut
+
 #}}}
 
 use 5.16.0; # unicode eval
@@ -65,6 +68,7 @@ our %OPS;
 
 
 #{{{ test
+
 =begin testing
 
   isa_ok $CLASS->new, $CLASS, 'constructor on class name';
@@ -80,7 +84,9 @@ our %OPS;
     'method called from constructor with arrayref';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub new {
@@ -100,6 +106,7 @@ sub new {
 
 
 #{{{ test
+
 =begin testing
 
   my @list = qw/ a b c /;
@@ -109,7 +116,9 @@ sub new {
   is_deeply [ $CLASS->_list(@list, \@list) ], [@list, @list], '_list multi';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub _list {
@@ -120,6 +129,7 @@ sub _list {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -148,7 +158,9 @@ sub _list {
     'search_paths, scalar context';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub search_paths {
@@ -167,6 +179,7 @@ sub search_paths {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -178,7 +191,9 @@ sub search_paths {
   }
 
 =end testing
+
 =cut
+
 #}}}
 
 sub cache {
@@ -190,6 +205,7 @@ sub cache {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -201,7 +217,9 @@ sub cache {
   is $forge->charset, $charset, 'charset, get';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub charset {
@@ -213,6 +231,7 @@ sub charset {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -223,7 +242,9 @@ sub charset {
   is $forge->layout, $layout, 'layout, get';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub layout {
@@ -235,6 +256,7 @@ sub layout {
 
 
 #{{{ test
+
 =begin testing
 
   use File::Temp qw/ tempdir /;
@@ -262,7 +284,9 @@ sub layout {
   ok $forge->_find_template('home'), '_find_template always searches cwd';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub _find_template {
@@ -283,6 +307,7 @@ sub _namespace_prefix { 'TF' }
 
 
 #{{{ test
+
 =begin testing
 
   my $prefix = $CLASS->_namespace_prefix;
@@ -294,7 +319,9 @@ sub _namespace_prefix { 'TF' }
     '_namespace, numeric';
 
 =end testing
+
 =cut
+
 #}}}
 
 # From Apache::Registry
@@ -316,6 +343,7 @@ sub _namespace {
 
 
 #{{{ test
+
 =begin testing
 
   my $code = $CLASS->_parse('hello');
@@ -363,7 +391,9 @@ sub _namespace {
   }
 
 =end testing
+
 =cut
+
 #}}}
 
 # This parsing technique is discussed in perlop
@@ -410,6 +440,7 @@ sub _parse {
 
 
 #{{{ test
+
 =begin testing
 
   my $package = "${CLASS}::Test::NamedSub";
@@ -423,9 +454,11 @@ sub _parse {
 
   is $sub->(), 'foo', '_named_sub, call returned code reference';
   is $package->run(), 'foo', '_named_sub, call named sub';
-  
+
 =end testing
+
 =cut
+
 #}}}
 
 sub _named_sub {
@@ -446,6 +479,7 @@ sub _named_sub {
 
 
 #{{{ test
+
 =begin testing
 
   my $package = "${CLASS}::Test::AnonSub";
@@ -458,9 +492,11 @@ sub _named_sub {
   ok !$@ && ref $sub eq 'CODE', '_anon_sub, eval code';
 
   is $sub->(), 'foo2', 'call template';
-  
+
 =end testing
+
 =cut
+
 #}}}
 
 sub _anon_sub {
@@ -480,6 +516,7 @@ sub _anon_sub {
 
 
 #{{{ test
+
 =begin testing
 
   my $mksub = eval { $CLASS->can('_mksub') };
@@ -487,9 +524,11 @@ sub _anon_sub {
 
   my $rv = $mksub->("return 'foo'");
   is $rv, 'foo', '_mksub, eval code';
-  
+
 =end testing
+
 =cut
+
 #}}}
 
 # we isolate this to prevent closures in the new sub. better way?
@@ -497,6 +536,7 @@ sub _mksub { eval $_[0] }
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new(cache => 1, charset => 'utf8');
@@ -515,7 +555,9 @@ sub _mksub { eval $_[0] }
   ok $@, '_compile, compile error should raise exception';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub _compile {
@@ -559,6 +601,7 @@ sub _compile {
 
 
 #{{{ test
+
 =begin testing
 
   use Scalar::Util qw/ refaddr /;
@@ -572,9 +615,11 @@ sub _compile {
 
   $forge->cache(0);
   is $forge->include(sub { return 22 }), 22, 'include, with caching off';
-  
+
 =end testing
+
 =cut
+
 #}}}
 
 sub include {
@@ -592,6 +637,7 @@ sub include {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -601,7 +647,9 @@ sub include {
   is $forge->content, 'test123', 'content, set';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub content {
@@ -614,6 +662,7 @@ sub content {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -630,7 +679,9 @@ sub content {
   is $forge->capture(\'hi'), 'hi', 'capture, no charset set';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub capture {
@@ -656,6 +707,7 @@ sub capture {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -676,7 +728,9 @@ sub capture {
   ok $@, 'content_for, name required';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub content_for {
@@ -702,6 +756,7 @@ sub content_for {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -716,7 +771,9 @@ sub content_for {
   ok $@, '_apply_layout, layout compile error should raise exception'; 
 
 =end testing
+
 =cut
+
 #}}}
 
 # Note that layouts may be called recursively.
@@ -736,6 +793,7 @@ sub _apply_layout {
 
 
 #{{{ test
+
 =begin testing
 
   my $forge = $CLASS->new;
@@ -758,7 +816,9 @@ sub _apply_layout {
     'run, nested layouts';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub run {
@@ -772,6 +832,7 @@ sub run {
 
 
 #{{{ test
+
 =begin testing
 
   {
@@ -795,7 +856,9 @@ sub run {
     'escape_uri, object provides uri-escaped content with as_uri()';
 
 =end testing
+
 =cut
+
 #}}}
 
 sub escape_uri {
@@ -812,6 +875,7 @@ sub escape_uri {
 
 
 #{{{ test
+
 =begin testing
 
   my $escaped = $CLASS->escape_html(
@@ -830,7 +894,9 @@ sub escape_uri {
     'escape_html, object provides html-escaped content with as_html()';
 
 =end testing
+
 =cut
+
 #}}}
 
 {
@@ -853,6 +919,7 @@ sub escape_uri {
 
 
 #{{{ test
+
 =begin testing
 
   my $output;
@@ -866,7 +933,9 @@ sub escape_uri {
   is $output, 'content', 'send [DEPRECATED]';
 
 =end testing
+
 =cut
+
 #}}}
 
 # Deprecated
@@ -882,12 +951,15 @@ sub escape_uri {
 
 
 #{{{ test
+
 =begin testing
 
   is $CLASS->new->trap_send(\'foo'), 'foo', 'trap_send [DEPRECATED]';
 
 =end testing
+
 =cut
+
 #}}}
 
 # Deprecated
@@ -956,8 +1028,6 @@ Text::Forge - embedded Perl templates
 This module uses templates to generate documents dynamically.
 Templates are normal text files except they have a bit of special syntax
 that allows you to run perl code inside them.
-
-=back
 
 =head1 Template Syntax
 
