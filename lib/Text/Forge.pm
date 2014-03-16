@@ -1048,7 +1048,7 @@ Generate a template. The first argument is the template, which may be
 either a file path or a reference to a scalar. Any additional arguments
 are passed to the template.
 
-  my $content = $forge->run('path/to/my/template', name => foo');
+  my $content = $forge->run('path/to/my/template', name => 'foo');
 
 If a path is supplied but is not absolute, it will be searched for within
 the list of search_paths().
