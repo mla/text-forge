@@ -11,8 +11,11 @@ version 6.01
     use Text::Forge;
 
     my $forge = Text::Forge->new;
+
+    # template stored as external file
     print $forge->run('/path/to/template');
 
+    # template passed as reference
     print $forge->run(\'
       <% my $d = scalar localtime %>The date is <%= $d %>
     ');
