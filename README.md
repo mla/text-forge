@@ -116,7 +116,7 @@ The list of directories to search for relative template paths.
 
 # TEMPLATE METHODS
 
-The following methods are intended for use within templates. It's all the
+The following methods are intended for use _within_ templates. It's all the
 same object though, so knock yourself out.
 
 ## include
