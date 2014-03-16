@@ -170,13 +170,13 @@ primary template.
 
 ## content\_for 
 
-Capture the output into a named placeholder. Same as capture() except the
+Capture the output into a named placeholder. Same as ["capture"](#capture) except the
 result in stored internally as $forge->{captures}{ $name }.
 
 Note that multiple calls to content\_for() with the same name are concatenated
 together (not overwritten); this allows, for example, multiple calls
 to something like content\_for('head', ...), which are then aggregated and
-inserted somewhere in the document.
+inserted elsewhere in the document.
 
 When called with two arguments, this method stores the specified content in
 the named location:
