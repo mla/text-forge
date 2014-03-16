@@ -1082,6 +1082,10 @@ The list of directories to search for relative template paths.
   $forge->search_paths('/home/app/templates', '.');
   $forge->run('header'); # looks for /home/app/templates/header and ./header
 
+=head2 content
+
+Returns the result of the last call to run().
+
 =head1 TEMPLATE METHODS
 
 The following methods are intended for use I<within> templates. It's all the
@@ -1125,12 +1129,18 @@ In this case the 'pagination' content has been "captured" into the variable
 $pagination, which is then inserted in multiple locations within the
 main template.
 
-=head2 capture_for
+=head2 content_for 
 
 Capture the output into a named placeholder. Same as capture() except the
-result in stored in $forge->{captures}{ $name }.
+result in stored internally as $forge->{captures}{ $name }.
 
-With two arguments, stores the specified content in the named location:
+Note that multiple calls to content_for() with the same name are concatenated
+together (not overwritten); this allows, for example, to have multiple calls
+to something like content_for('head', ...) in various places, which are
+aggregated together and inserted at the head of the document.
+
+When called With two arguments, this method stores the specified content in
+the named location:
 
   my $forge = Text::Forge->new;
   $forge->run(\'
@@ -1142,7 +1152,7 @@ With two arguments, stores the specified content in the named location:
     <% }) %>
   ');
 
-With one argument, returns the previously stored content:
+When called with one argument, returns the previously stored content, if any:
 
   my $nav = $self->content_for('nav');
 
