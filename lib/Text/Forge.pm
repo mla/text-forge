@@ -1130,7 +1130,7 @@ For example:
     <%$ $pagination %>
   ');
 
-In this case the "pagination" content has been "captured" into the variable
+In this case the "pagination" content has been captured into the variable
 $pagination, which is then inserted in multiple locations within the
 main template.
 
