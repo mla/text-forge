@@ -1180,7 +1180,7 @@ simply:
   # results in:
   # <html><body><h1>Hello, World!</h1></body></html>
 
-Within the layout, the primary template content is available in $_ (as well
+Within the layout, the primary template content is available as $_ (as well
 as through $self->content_for('main')).
 
 =cut
