@@ -1,5 +1,6 @@
 package Text::Forge;
 # ABSTRACT: Templates with embedded Perl
+# vim: set foldmethod=marker:
 
 =pod
 
@@ -1223,3 +1224,4 @@ result of that method will be returned instead. This allows objects to
 be constructed that keep track of their own encoding state.
 
 =cut
+
