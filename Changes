@@ -1,0 +1,4 @@
+2014-03-17: Version 6.02
+            Add prerequisite IPC::System::Simple (Stefan Geneshky)
+            Small documentation changes
+            Travis-CI integration
