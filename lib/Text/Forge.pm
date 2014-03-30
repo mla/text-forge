@@ -30,7 +30,7 @@ use File::Spec ();
 use HTML::Entities ();
 use URI::Escape ();
 
-our $VERSION = '6.02';
+our $VERSION = '6.03';
 
 our @FINC = ('.'); # default search paths
 our %FINC; # compiled template cache
@@ -98,7 +98,6 @@ our %OPS;
 
 sub new {
   my $class = shift;
-  my %args = @_;
   
   $class = ref($class) || $class;
   my $self = bless {}, $class;
