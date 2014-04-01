@@ -538,7 +538,10 @@ sub _anon_sub {
 #}}}
 
 # we isolate this to prevent closures in the new sub. better way?
-sub _mksub { eval $_[0] }
+{ 
+  no warnings 'redefine';
+  sub _mksub { eval $_[0] }
+} 
 
 
 #{{{ test
