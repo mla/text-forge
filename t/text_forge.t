@@ -4,17 +4,18 @@
 # 
 # source: lib/Text/Forge.pm
 
+use strict;
+use warnings;
 use utf8;
 use Carp;
 use autodie qw/ :all /;
-# no warnings 'uninitialized';
 use Test::Most;
 
 
 $| = 1;
 
-my $CLASS = 'Text::Forge';
-my $SOURCE_PATH = 'lib/Text/Forge.pm';
+our $CLASS = 'Text::Forge';
+
 
 # =begin testing
 {
@@ -207,6 +208,7 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
   {
     no warnings 'once';
+
     local $Text::Forge::INTERPOLATE = 1;
  
     my $code = $CLASS->_parse('<% my $i = 5 %>hello $i there <% %> $i');
@@ -230,7 +232,6 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
   is $sub->(), 'foo', '_named_sub, call returned code reference';
   is $package->run(), 'foo', '_named_sub, call named sub';
-  
 }
 
 
@@ -247,7 +248,6 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
   ok !$@ && ref $sub eq 'CODE', '_anon_sub, eval code';
 
   is $sub->(), 'foo2', 'call template';
-  
 }
 
 
@@ -259,7 +259,6 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
   my $rv = $mksub->("return 'foo'");
   is $rv, 'foo', '_mksub, eval code';
-  
 }
 
 
@@ -297,7 +296,6 @@ my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
   $forge->cache(0);
   is $forge->include(sub { return 22 }), 22, 'include, with caching off';
-  
 }
 
 

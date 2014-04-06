@@ -1,3 +1,6 @@
+            Version 6.03
+            Silence 'used once' warnings in tests
+
 2014-03-17: Version 6.02
             Add prerequisite IPC::System::Simple (Stefan Geneshky)
             Small documentation changes

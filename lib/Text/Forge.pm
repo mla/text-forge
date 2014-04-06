@@ -138,6 +138,8 @@ sub _list {
 
 =begin testing
 
+  no warnings 'once';
+
   my $forge = $CLASS->new;
   is_deeply [ $forge->search_paths ], \@Text::Forge::FINC,
     'search_paths, defaults to \@FINC';
@@ -188,6 +190,8 @@ sub search_paths {
 
 =begin testing
 
+  no warnings 'once';
+
   my $forge = $CLASS->new;
   is $forge->cache, $Text::Forge::CACHE, 'cache, defaults to $CACHE';
 
@@ -213,6 +217,8 @@ sub cache {
 #{{{ test
 
 =begin testing
+
+  no warnings 'once';
 
   my $forge = $CLASS->new;
   is $forge->charset, $Text::Forge::CHARSET,
@@ -389,6 +395,8 @@ sub _namespace {
 
 
   {
+    no warnings 'once';
+
     local $Text::Forge::INTERPOLATE = 1;
  
     my $code = $CLASS->_parse('<% my $i = 5 %>hello $i there <% %> $i');
