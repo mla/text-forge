@@ -1,0 +1,127 @@
+#!/usr/bin/env perl
+
+# Run inline tests in perl modules, scripts, or templates
+#
+# Usage: inline [module|file|directory]
+#
+# Example:
+#
+#   $ inline MyClass::URL
+#   $ inline MyClass/URL.pm
+#   $ inline lib/
+#
+#   (run any inline tests found)
+#   $ inline
+
+#{{{ test
+=begin testing
+
+   ok -d '/tmp', 'temp dir exists';
+
+=end testing
+=cut
+#}}}
+
+use strict;
+use lib 'lib';
+use autodie qw/ :all /;
+use Readonly;
+use Getopt::Long qw/ GetOptions /;
+use List::Util qw/ first /;
+use File::Spec;
+use File::Find;
+use TAP::Harness;
+use MLA::Test::Inline;
+
+# If no files or directories specified, default to these
+Readonly my @DEFAULT_SOURCE_DIRS => ("./lib");
+
+my %opt = (
+  run => 1,
+  color => 1,
+  test_dir => 't/inline',
+  jobs => 9,
+  clean => 0,
+);
+
+GetOptions(
+  \%opt,
+  'run!',
+  'clean!',
+  'list',
+  'verbose',
+  'color',
+  'refresh|force',
+  'test_dir|test-dir|testdir=s',
+  'jobs=i',
+);
+
+-d $opt{test_dir} or die "test directory '$opt{test_dir}' not found";
+
+find(
+  sub { unlink $_ if -f $_ && /\.t$/ },
+  $opt{test_dir},
+) if $opt{clean};
+
+my %source;
+my @tests;
+
+# Must be a file, directory, or package name
+push @ARGV, @DEFAULT_SOURCE_DIRS unless @ARGV;
+while (@ARGV) {
+  my $source = shift @ARGV;
+
+  if (-d $source) {
+    opendir my $dh, $source or die "opendir '$source' failed: $!";
+    push @ARGV, map { "$source/$_" } grep { !/^\.\.?$/ } readdir($dh);
+    next;
+  }
+
+  if (-f $source) {
+    my ($test_path, $updated) = MLA::Test::Inline->write_test(
+      source_path => $source,
+      test_dir => $opt{test_dir},
+      refresh => $opt{refresh},
+    );
+    $test_path or next; # no tests found
+
+    if (exists $source{ $test_path }) {
+      die "Inline source files '$source' and '$source{ $test_path }' " .
+          "both using same namespace, clobbering test '$test_path'";
+    }
+
+    $source{ $test_path } = $source;
+    push @tests, $test_path;
+
+    warn $updated ? "$source\n" : "$source [no changes]\n" if $opt{verbose};
+    next;
+  }
+
+  # See if it can be found as a module 
+  my $path = $source;
+  $path =~ s{::}{/}g;
+  $path .= '.pm';
+
+  $path = first { -f } map { "$_/$path" } @INC;
+  if ($path) {
+    push @ARGV, $path;
+    next;
+  }
+
+  die "unable to find source '$source'";
+}
+
+if ($opt{list}) {
+  print "$_\n" foreach @tests;
+  exit 0;
+}
+
+if (!$opt{run}) { exit 0 }
+
+my $harness = TAP::Harness->new({
+  color => $opt{color},
+  verbosity => $opt{verbose},
+  # switches => '-X', # XXX silence uninitialized warnings
+  $opt{jobs} ? (jobs => $opt{jobs}) : (),
+});
+$harness->runtests(@tests);

@@ -6,16 +6,22 @@
 
 use strict;
 use warnings;
+no warnings 'uninitialized';
+use lib 'lib';
 use utf8;
 use Carp;
 use autodie qw/ :all /;
-use Test::Most;
-
+use Test::Deep;
+use Test::Differences;
+use Test::Exception;
+use Test::More;
+use Test::Output;
+use Test::Warn;
 
 $| = 1;
 
-our $CLASS = 'Text::Forge';
-
+my $CLASS = 'Text::Forge';
+my $SOURCE_PATH = 'lib/Text/Forge.pm';
 
 # =begin testing
 {
