@@ -600,11 +600,15 @@ sub _compile {
   my $fpath = $self->_find_template($path);
   my $package = $self->_namespace($fpath);
 
-  my $charset = $self->charset;
+  my $charset = $self->charset // '';
   $charset = ":encoding($charset)" if $charset;
 
   open my $fh, "<$charset", $fpath;
   my $source = do { local $/; <$fh> };
+  if (defined $source && $charset =~ /utf/i) {
+    $source =~ s/\A\N{BOM}//; # Strip byte-order mark (BOM)
+  }
+
   my $code = $self->_parse($source, $fpath);
   $code = $self->_named_sub($package, $fpath, $code);
 
