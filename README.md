@@ -1,11 +1,3 @@
-# NAME
-
-Text::Forge - Templates with embedded Perl
-
-# VERSION
-
-version 6.02
-
 # SYNOPSIS
 
     use Text::Forge;
@@ -247,14 +239,3 @@ The u() method is just an alias for convenience.
 If a blessed reference is passed that provides an as\_uri() method, the
 result of that method will be returned instead. This allows objects to
 be constructed that keep track of their own encoding state.
-
-# AUTHOR
-
-Maurice Aubrey <maurice.aubrey@gmail.com>
-
-# COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by Maurice Aubrey.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
